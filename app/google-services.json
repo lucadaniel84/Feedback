@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "104059913344",
+    "firebase_url": "https://feedback-afe1f.firebaseio.com",
+    "project_id": "feedback-afe1f",
+    "storage_bucket": "feedback-afe1f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:104059913344:android:8e9d7263267977c4",
+        "android_client_info": {
+          "package_name": "upt.ac.feedback"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "104059913344-8thu4cfk04di9p4ksh5aqmn94jkd8g2p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAfoOssbsKRdWK4cp1nn-O5YGp3LC4ado8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
