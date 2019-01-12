@@ -2,10 +2,13 @@
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -30,6 +33,12 @@ import java.util.List;
     ListView listViewComments;
     Button buttonAddComment;
 
+    String id;
+
+    private void setId(String id){
+        this.id = id;
+    }
+
     DatabaseReference databaseComments;
 
     List<Comment> comments;
@@ -53,6 +62,8 @@ import java.util.List;
         String id = intent.getStringExtra(MainActivity.VERSION_ID);
         String name = intent.getStringExtra(MainActivity.VERSION_NAME);
 
+        setId(id);
+
         textViewVersionName.setText(name);
 
         databaseComments = FirebaseDatabase.getInstance().getReference("comments").child(id);
@@ -63,6 +74,20 @@ import java.util.List;
                 saveComment();
             }
         });
+
+
+//==================================== Developer Only ====================================
+        listViewComments.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                Comment comment = comments.get(position);
+                showDeleteDialog(comment.getCommentId()); // does not do anything
+                return false; // true
+            }
+        });
+//==================================== Developer Only ====================================
+
+
     }
 
       @Override
@@ -89,6 +114,35 @@ import java.util.List;
               }
           });
       }
+
+
+//==================================== Developer Only ====================================
+      private void showDeleteDialog(final String commentId){
+          AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+          LayoutInflater inflater = getLayoutInflater();
+          final View dialogView = inflater.inflate(R.layout.delete_dialog,null);
+          dialogBuilder.setView(dialogView);
+          final Button buttonDelete = (Button) dialogView.findViewById(R.id.buttonDelete);
+          dialogBuilder.setTitle("Delete comment ?");
+          final AlertDialog alertDialog = dialogBuilder.create();
+          alertDialog.show();
+
+          buttonDelete.setOnClickListener(new View.OnClickListener() {
+              @Override
+              public void onClick(View v) {
+                  deleteComment(commentId);
+                  alertDialog.dismiss();
+              }
+          });
+      }
+
+      private void deleteComment(String commentId){
+        DatabaseReference drComment = FirebaseDatabase.getInstance().getReference("comments").child(id).child(commentId);
+        drComment.removeValue(); // remove comment
+        Toast.makeText(this, "Comment deleted !", Toast.LENGTH_LONG).show();
+      }
+//==================================== Developer Only ====================================
+
 
       private void saveComment(){
         String commentString = editTextComment.getText().toString().trim();

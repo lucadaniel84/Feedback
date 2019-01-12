@@ -29,9 +29,13 @@ public class MainActivity extends AppCompatActivity {
     public static final String VERSION_NAME = "versionname";
     public static final String VERSION_ID = "versionid";
 
+
+//==================================== Developer Only ====================================
     EditText editTextName;
     Button buttonAdd;
     Spinner spinnerPlatforms;
+//==================================== Developer Only ====================================
+
 
     DatabaseReference databaseVersions;
 
@@ -46,12 +50,12 @@ public class MainActivity extends AppCompatActivity {
 
         databaseVersions = FirebaseDatabase.getInstance().getReference("versions");
 
+
+//================= DO NOT FORGET TO EDIT THE activity_main.xml FILE TOO  ================
+//==================================== Developer Only ====================================
         editTextName = (EditText) findViewById(R.id.editTextName);
         buttonAdd = (Button) findViewById(R.id.buttonAddVersion);
         spinnerPlatforms = (Spinner) findViewById(R.id.spinnerPlatforms);
-
-        listViewVersions = (ListView) findViewById(R.id.listViewVersions);
-        versions = new ArrayList<>();
 
         buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,7 +63,11 @@ public class MainActivity extends AppCompatActivity {
                 addVersion();
             }
         });
+//==================================== Developer Only ====================================
 
+
+        listViewVersions = (ListView) findViewById(R.id.listViewVersions);
+        versions = new ArrayList<>();
         listViewVersions.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -71,14 +79,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+//==================================== Developer Only ====================================
         listViewVersions.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 Version version = versions.get(position);
-                showUpdateDialog(version.getVersionId(), version.getVersionName());
-                return false;
+                showDeleteDialog(version.getVersionId(), version.getVersionName());
+                return true;
             }
         });
+//==================================== Developer Only ====================================
+
+
     }
 
     @Override
@@ -114,43 +127,25 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void showUpdateDialog(final String versionId, String versionName){
+
+//==================================== Developer Only ====================================
+    private void showDeleteDialog(final String versionId, String versionName){
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
-        final View dialogView = inflater.inflate(R.layout.update_dialog,null);
+        final View dialogView = inflater.inflate(R.layout.delete_dialog,null);
         dialogBuilder.setView(dialogView);
 
-        final EditText editTextName = (EditText) dialogView.findViewById(R.id.editTextName);
-        final Spinner spinnerPlatforms = (Spinner) dialogView.findViewById(R.id.spinnerPlatforms);
-        final Button buttonUpdate = (Button) findViewById(R.id.buttonUpdate);
         final Button buttonDelete = (Button) dialogView.findViewById(R.id.buttonDelete);
 
-        dialogBuilder.setTitle("Delete Version " + versionName + " ?");
+        dialogBuilder.setTitle("Delete Version " + versionName + " with comments?");
         final AlertDialog alertDialog = dialogBuilder.create();
         alertDialog.show();
-
-// ======================================================================
-//        buttonUpdate.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                String name = editTextName.getText().toString().trim();
-//                String platform = spinnerPlatforms.getSelectedItem().toString();
-//
-//                if(TextUtils.isEmpty(name)){
-//                    editTextName.setError("Version required");
-//                    return;
-//                }
-//
-//                updateVersion(versionId, name, platform);
-//                alertDialog.dismiss();
-//            }
-//        });
-// ======================================================================
 
         buttonDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 deleteVersion(versionId);
+                alertDialog.dismiss();
             }
         });
 
@@ -164,18 +159,8 @@ public class MainActivity extends AppCompatActivity {
         drComments.removeValue();
 
         Toast.makeText(this, "Version is deleted", Toast.LENGTH_LONG).show();
+
     }
-
-// ======================================================================
-//    private void updateVersion(String id, String name, String platform){
-//        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("versions").child(id);
-//        Version version = new Version(id, name, platform);
-//        databaseReference.setValue(version);
-//        Toast.makeText(this, "Version Updated Successfully", Toast.LENGTH_LONG).show();
-////        return true;
-//    }
-// ======================================================================
-
 
     // this method is saving a new version to the Firebase Realtime Database
     private void addVersion(){
@@ -206,4 +191,5 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Version should not be empty", Toast.LENGTH_LONG).show();
         }
     }
+//==================================== Developer Only ====================================
 }

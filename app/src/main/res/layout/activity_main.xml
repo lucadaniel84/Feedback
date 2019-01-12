@@ -8,6 +8,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <!--//==================================== Developer Only ====================================-->
     <EditText
         android:id="@+id/editTextName"
         android:hint="Enter name"
@@ -25,6 +26,7 @@
         android:text="Add Version"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+    <!--//==================================== Developer Only ====================================-->
 
     <ListView
         android:id="@+id/listViewVersions"
